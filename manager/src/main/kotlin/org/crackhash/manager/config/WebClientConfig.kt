@@ -15,7 +15,7 @@ class WebClientConfig {
     @Bean
     @ConditionalOnMissingBean(RabbitConfig::class)
     fun createWebSender(properties: ManagerConfigurationProperties): WebSender =
-        WebSender(WebClient.create("${properties.worker.host}:${properties.worker.port}"))
+        WebSender(WebClient.create(properties.uri))
 
     class WebSender(private val webClient: WebClient) : Sender {
 

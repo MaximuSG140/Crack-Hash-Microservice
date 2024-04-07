@@ -48,14 +48,14 @@ data class Task(
         )
     }
 
-    fun updateByTimeout(timeoutInMinutes: Long): Task {
-        if (timeoutInMinutes <= 0) {
-            throw IllegalArgumentException("Timeout in minutes=$timeoutInMinutes must be more than zero")
+    fun updateByTimeout(timeoutInSecond: Long): Task {
+        if (timeoutInSecond <= 0) {
+            throw IllegalArgumentException("Timeout in minutes=$timeoutInSecond must be more than zero")
         }
-        return this.copy(status = if (isErrorStatus(timeoutInMinutes)) TaskStatus.ERROR else status)
+        return this.copy(status = if (isErrorStatus(timeoutInSecond)) TaskStatus.ERROR else status)
     }
 
-    private fun isErrorStatus(timeoutInMinutes: Long): Boolean =
+    private fun isErrorStatus(timeoutInSecond: Long): Boolean =
         run { status != TaskStatus.READY &&
-                ZonedDateTime.now() > createTime.toInstant().atZone(ZoneOffset.UTC).plusMinutes(timeoutInMinutes) }
+                ZonedDateTime.now() > createTime.toInstant().atZone(ZoneOffset.UTC).plusSeconds(timeoutInSecond) }
 }

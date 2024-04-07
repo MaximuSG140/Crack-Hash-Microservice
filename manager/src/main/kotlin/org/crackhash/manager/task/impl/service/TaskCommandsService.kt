@@ -38,7 +38,7 @@ class TaskCommandsService(
     @LogBefore
     override fun getTaskResponse(id: String): TaskResponse =
         runCatching { repository.find(id) }
-            .mapCatching { it.updateByTimeout(properties.ttl) }
+            .mapCatching { it.updateByTimeout(properties.ttl.toLong()) }
             .onSuccess { if (it.status == TaskStatus.ERROR) repository.remove(it) }
             .map { mapToTaskResponse(it) }
             .getOrThrow()

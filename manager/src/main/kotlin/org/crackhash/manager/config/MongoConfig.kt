@@ -1,5 +1,9 @@
 package org.crackhash.manager.config
 
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoClients
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.MongoDatabaseFactory
@@ -16,4 +20,10 @@ class MongoConfig: AbstractMongoClientConfiguration() {
         run { MongoTransactionManager(factory) }
 
     override fun getDatabaseName(): String = "test"
+
+    override fun mongoClient(): MongoClient {
+        val connectionString = ConnectionString("mongodb://mongo1:27017,mongo2:27017,mongo3:27017/test")
+        val setting = MongoClientSettings.builder().applyConnectionString(connectionString).build()
+        return MongoClients.create(setting)
+    }
 }

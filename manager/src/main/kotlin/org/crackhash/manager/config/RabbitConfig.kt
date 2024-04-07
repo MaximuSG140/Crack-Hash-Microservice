@@ -18,20 +18,20 @@ class RabbitConfig {
     @Bean
     fun createDeclarables(properties: ManagerConfigurationProperties): Declarables =
         Declarables(
-            QueueBuilder.durable(properties.queue)
-                .deadLetterExchange(properties.queue)
-                .ttl(properties.worker.ttl)
+            QueueBuilder.durable(properties.managerQueue)
+                .deadLetterExchange(properties.managerQueue)
+                .ttl(properties.ttl * 1000)
                 .build(),
-            QueueBuilder.durable(properties.worker.queue)
-                .deadLetterExchange(properties.worker.queue)
-                .ttl(properties.worker.ttl)
+            QueueBuilder.durable(properties.workerQueue)
+                .deadLetterExchange(properties.workerQueue)
+                .ttl(properties.ttl * 1000)
                 .build()
         )
 
     @Bean
     @ConditionalOnBean(RabbitConfig::class)
     fun createSender(properties: ManagerConfigurationProperties, template: RabbitTemplate, mapper: ObjectMapper): Sender =
-        RabbitSender(template, properties.worker.queue, mapper)
+        RabbitSender(template, properties.workerQueue, mapper)
 
     class RabbitSender(
         private val template: RabbitTemplate,

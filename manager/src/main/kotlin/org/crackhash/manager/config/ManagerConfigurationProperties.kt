@@ -5,17 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "crack-hash-manager")
 data class ManagerConfigurationProperties(
     val version: String,
-    val ttl: Long,
+    val ttl: Int,
     val partCount: Int,
     val alphabet: String,
-    val queue: String,
-    val worker: Worker
-) {
-
-    data class Worker(
-        val host: String,
-        val port: Int,
-        val ttl: Int,
-        val queue: String
-    )
-}
+    val managerQueue: String,
+    val uri: String,
+    val workerQueue: String
+)
