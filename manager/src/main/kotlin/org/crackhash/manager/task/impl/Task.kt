@@ -1,8 +1,8 @@
-package org.crackhash.manager.task.impl.domain
+package org.crackhash.manager.task.impl
 
-import org.crackhash.manager.task.api.response.TaskStatus
 import org.crackhash.manager.task.api.event.CompletedSubtaskEvent
-import org.crackhash.manager.task.api.request.CreateTaskRequest
+import org.crackhash.manager.task.api.dto.CreateTaskRequest
+import org.crackhash.manager.task.api.dto.TaskStatus
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.io.Serializable
@@ -13,7 +13,7 @@ import java.util.*
 @Document("task")
 data class Task(
     @Id val id: String = UUID.randomUUID().toString(),
-    val words: List<String> = emptyList(),
+    val words: Set<String> = emptySet(),
     val partNumbers: List<Int> = emptyList(),
     val status: TaskStatus = TaskStatus.IN_PROGRESS,
     val createTime: Date = Date.from(ZonedDateTime.now().toInstant()),

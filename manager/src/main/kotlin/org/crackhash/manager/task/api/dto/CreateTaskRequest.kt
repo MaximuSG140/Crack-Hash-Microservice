@@ -1,4 +1,4 @@
-package org.crackhash.manager.task.api.request
+package org.crackhash.manager.task.api.dto
 
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Positive

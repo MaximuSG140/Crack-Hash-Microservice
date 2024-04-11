@@ -1,4 +1,4 @@
-package org.crackhash.manager.config
+package org.crackhash.manager.util
 
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.After
@@ -14,10 +14,10 @@ class LoggingAspect {
 
     private val log = LoggerFactory.getLogger(LoggingAspect::class.java)
 
-    @Pointcut("@annotation(org.crackhash.manager.config.LogBefore)")
+    @Pointcut("@annotation(org.crackhash.manager.util.LogBefore)")
     fun logBeforePointcut() {}
 
-    @Pointcut("@annotation(org.crackhash.manager.config.LogAfter)")
+    @Pointcut("@annotation(org.crackhash.manager.util.LogAfter)")
     fun logAfterPointcut() {}
 
     @Before("logBeforePointcut()")

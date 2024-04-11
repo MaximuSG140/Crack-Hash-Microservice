@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class SubtaskConsumer(private val commands: SubtaskCommands, private val mapper: ObjectMapper) {
 
-    @RabbitListener(queues = [Route.QUEUE])
+    @RabbitListener(queues = [Route.WORKER_QUEUE])
     fun consume(str: String, channel: Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long): Unit =
         runCatching { commands.run(mapToCreatedTaskEvent(str)) }
             .onSuccess { channel.basicAck(tag, false) }

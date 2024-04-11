@@ -1,4 +1,4 @@
-package org.crackhash.manager.config
+package org.crackhash.manager.util
 
 interface Sender {
 

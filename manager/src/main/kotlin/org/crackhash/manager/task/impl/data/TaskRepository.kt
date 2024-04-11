@@ -1,12 +1,13 @@
 package org.crackhash.manager.task.impl.data
 
-import org.crackhash.manager.task.impl.domain.Task
+import org.crackhash.manager.task.impl.Task
+import reactor.core.publisher.Mono
 
 interface TaskRepository {
 
-    fun add(task: Task): Task
+    fun add(task: Task): Mono<Task>
 
-    fun remove(task: Task)
+    fun remove(task: Task): Mono<Task>
 
-    fun find(id: String): Task
+    fun findById(id: String): Mono<Task>
 }

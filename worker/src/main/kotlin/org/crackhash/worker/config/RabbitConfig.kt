@@ -16,7 +16,7 @@ class RabbitConfig {
     @Bean
     @ConditionalOnBean(RabbitConfig::class)
     fun createSender(properties: WorkerConfigurationProperties, template: RabbitTemplate, mapper: ObjectMapper): Sender =
-        RabbitSender(template, properties.queue, mapper)
+        RabbitSender(template, Route.MANAGER_QUEUE, mapper)
 
     class RabbitSender(
         private val template: RabbitTemplate,

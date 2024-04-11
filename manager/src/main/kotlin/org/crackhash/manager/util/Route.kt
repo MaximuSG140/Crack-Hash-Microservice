@@ -1,4 +1,4 @@
-package org.crackhash.manager.config
+package org.crackhash.manager.util
 
 interface Route {
     companion object{
@@ -8,6 +8,7 @@ interface Route {
         const val GET_TASK = "/hash/status/requestId={id}"
         const val UPDATE_TASK = "/manager/hash/crack/request"
         const val CREATE_SUBTASK = "/worker/hash/crack/task"
-        const val QUEUE = "manager-queue"
+        const val MANAGER_QUEUE = "manager-queue"
+        const val WORKER_QUEUE = "worker-queue"
     }
 }

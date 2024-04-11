@@ -1,6 +1,8 @@
 package org.crackhash.manager.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.crackhash.manager.util.Route
+import org.crackhash.manager.util.Sender
 import org.springframework.amqp.core.Declarables
 import org.springframework.amqp.core.QueueBuilder
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
@@ -16,14 +18,15 @@ import org.springframework.context.annotation.Configuration
 class RabbitConfig {
 
     @Bean
+    @ConditionalOnBean(RabbitConfig::class)
     fun createDeclarables(properties: ManagerConfigurationProperties): Declarables =
         Declarables(
-            QueueBuilder.durable(properties.managerQueue)
-                .deadLetterExchange(properties.managerQueue)
+            QueueBuilder.durable(Route.MANAGER_QUEUE)
+                .deadLetterExchange(Route.MANAGER_QUEUE)
                 .ttl(properties.ttl * 1000)
                 .build(),
-            QueueBuilder.durable(properties.workerQueue)
-                .deadLetterExchange(properties.workerQueue)
+            QueueBuilder.durable(Route.WORKER_QUEUE)
+                .deadLetterExchange(Route.WORKER_QUEUE)
                 .ttl(properties.ttl * 1000)
                 .build()
         )
@@ -31,7 +34,7 @@ class RabbitConfig {
     @Bean
     @ConditionalOnBean(RabbitConfig::class)
     fun createSender(properties: ManagerConfigurationProperties, template: RabbitTemplate, mapper: ObjectMapper): Sender =
-        RabbitSender(template, properties.workerQueue, mapper)
+        RabbitSender(template, Route.WORKER_QUEUE, mapper)
 
     class RabbitSender(
         private val template: RabbitTemplate,

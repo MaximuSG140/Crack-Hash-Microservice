@@ -8,7 +8,5 @@ data class ManagerConfigurationProperties(
     val ttl: Int,
     val partCount: Int,
     val alphabet: String,
-    val managerQueue: String,
-    val uri: String,
-    val workerQueue: String
+    val uri: String
 )

@@ -6,9 +6,11 @@ services:
     container_name: rabbitmq
     ports: [ "15672:15672" ]
 
-#  redis:
-#    image: redis:7-alpine
-#    ports: [ "6379:6379" ]
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: ["redis-server", "--appendonly", "no", "--maxmemory", "500mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: [ "6379:6379" ]
 
   mongo1:
     image: mongo:latest
@@ -16,11 +18,11 @@ services:
     depends_on: [ mongo2, mongo3 ]
     command: [ "--replSet", "my-replica-set", "--bind_ip_all", "--port", "27017" ]
     ports: [ "27017:27017" ]
-#    healthcheck:
-#      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'my-replica-set',members:[{_id:0,host:'mongo1:27017'}, {_id:0,host:'mongo2:27017'}, {_id:0,host:'mongo3:27017'}]}) }" | mongosh --port 27017 --quiet
-#      interval: 5s
-#      timeout: 30s
-#      retries: 30
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'my-replica-set',members:[{_id:0,host:'mongo1:27017'}, {_id:0,host:'mongo2:27017'}, {_id:0,host:'mongo3:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      retries: 30
 
   mongo2:
     image: mongo:latest
@@ -42,21 +44,20 @@ services:
   gateway:
     container_name: gateway
     build: ./gateway
-    depends_on: [ eureka-server ]
+    depends_on: [ manager, worker1 ]
     ports: [ "8765:8765" ]
 
   manager:
     container_name: manager
     build: ./manager
-    depends_on: [ rabbitmq, eureka-server, mongo1 ]
-#    links: [ rabbitmq:rabbitmq, eureka-server:eureka-server ]
+    depends_on: [ rabbitmq, eureka-server, mongo1, redis ]
 
   worker1:
     container_name: worker1
     build: ./worker
-    depends_on: [ rabbitmq, eureka-server ]
+    depends_on: [ manager ]
 
   worker2:
     container_name: worker2
     build: ./worker
-    depends_on: [ rabbitmq, eureka-server ]
+    depends_on: [ manager ]
