@@ -1,7 +1,6 @@
 package org.crackhash.manager.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.crackhash.manager.util.Route
 import org.crackhash.manager.util.Sender
 import org.springframework.amqp.core.Declarables
 import org.springframework.amqp.core.QueueBuilder

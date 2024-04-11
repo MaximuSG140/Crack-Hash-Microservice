@@ -1,5 +1,8 @@
 package org.crackhash.manager.task.api.event
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CreatedTaskEvent(
     val id: String,
     val partNumber: Int,

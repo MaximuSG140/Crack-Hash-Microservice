@@ -1,9 +1,9 @@
 package org.crackhash.manager.task.port
 
+import org.crackhash.manager.config.Route
 import org.crackhash.manager.task.api.TaskService
 import org.crackhash.manager.task.api.dto.CreateTaskRequest
 import org.crackhash.manager.task.api.dto.TaskResponse
-import org.crackhash.manager.util.Route
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 

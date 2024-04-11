@@ -1,9 +1,9 @@
 package org.crackhash.manager.task.port
 
 import org.crackhash.manager.config.RabbitConfig
+import org.crackhash.manager.config.Route
 import org.crackhash.manager.task.api.TaskService
 import org.crackhash.manager.task.api.event.CompletedSubtaskEvent
-import org.crackhash.manager.util.Route
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody

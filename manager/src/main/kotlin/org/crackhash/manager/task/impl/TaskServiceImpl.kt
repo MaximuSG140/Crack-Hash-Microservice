@@ -43,7 +43,7 @@ class TaskServiceImpl(
             .flatMap { if (it.status == TaskStatus.ERROR) repository.remove(it) else Mono.just(it) }
             .map { mapToTaskResponse(it) }
 
-    private fun mapToTaskResponse(task: Task): TaskResponse = TaskResponse(task.status, task.words.toList())
+    private fun mapToTaskResponse(task: Task): TaskResponse = TaskResponse(task.status, task.words)
 
     private fun mapToCreatedTaskEvents(task: Task): List<CreatedTaskEvent> =
         List(properties.partCount) {

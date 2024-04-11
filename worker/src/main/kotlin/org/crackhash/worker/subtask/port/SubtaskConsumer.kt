@@ -1,24 +1,20 @@
 package org.crackhash.worker.subtask.port
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
+import kotlinx.serialization.json.Json
 import org.crackhash.worker.config.Route
-import org.crackhash.worker.subtask.api.event.CreatedTaskEvent
-import org.crackhash.worker.subtask.api.SubtaskCommands
+import org.crackhash.worker.subtask.api.SubtaskService
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.support.AmqpHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Component
 
 @Component
-class SubtaskConsumer(private val commands: SubtaskCommands, private val mapper: ObjectMapper) {
+class SubtaskConsumer(private val commands: SubtaskService) {
 
     @RabbitListener(queues = [Route.WORKER_QUEUE])
-    fun consume(str: String, channel: Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long): Unit =
-        runCatching { commands.run(mapToCreatedTaskEvent(str)) }
+    fun consume(request: String, channel: Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long): Unit =
+        runCatching { commands.run(Json.decodeFromString(request)) }
             .onSuccess { channel.basicAck(tag, false) }
             .getOrThrow()
-
-    private fun mapToCreatedTaskEvent(str: String): CreatedTaskEvent =
-        mapper.readValue(str, CreatedTaskEvent::class.java)
 }

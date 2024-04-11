@@ -1,4 +1,4 @@
-package org.crackhash.manager.util
+package org.crackhash.manager.config
 
 interface Route {
     companion object{

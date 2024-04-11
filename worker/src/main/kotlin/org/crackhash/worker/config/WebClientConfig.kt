@@ -1,5 +1,6 @@
 package org.crackhash.worker.config
 
+import org.crackhash.worker.util.Sender
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

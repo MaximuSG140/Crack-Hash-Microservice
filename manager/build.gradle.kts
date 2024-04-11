@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
 //    id("nu.studer.jooq") version "8.2"
     kotlin("jvm") version "1.9.23"
+    kotlin("plugin.serialization") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
 }
 
@@ -38,7 +39,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-logging")
 
-//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     compileOnly("org.mongodb:mongodb-driver-reactivestreams")
 //    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -46,10 +47,6 @@ dependencies {
 //    implementation("org.flywaydb:flyway-core")
 //    jooqGenerator("org.postgresql:postgresql")
 //    implementation("org.postgresql:postgresql")
-
-//    implementation("org.springframework.boot:spring-boot-starter-cache")
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
     implementation("org.springframework.boot:spring-boot-starter-amqp")
 //    implementation("org.springframework.amqp:spring-rabbit-stream")
@@ -63,6 +60,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

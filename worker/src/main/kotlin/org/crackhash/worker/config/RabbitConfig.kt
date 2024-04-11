@@ -1,6 +1,7 @@
 package org.crackhash.worker.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.crackhash.worker.util.Sender
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
