@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import reactor.core.publisher.Mono
 
 @EnableRabbit
 @Configuration
@@ -41,7 +42,7 @@ class RabbitConfig {
         private val mapper: ObjectMapper
     ) : Sender {
 
-        override fun <T : Any> invoke(requests: List<T>): Unit =
-            requests.forEach { template.convertAndSend(queue, mapper.writeValueAsString(it)) }
+        override fun <T : Any> invoke(requests: List<T>): Mono<Unit> =
+            Mono.just(requests.forEach { template.convertAndSend(queue, mapper.writeValueAsString(it)) })
     }
 }

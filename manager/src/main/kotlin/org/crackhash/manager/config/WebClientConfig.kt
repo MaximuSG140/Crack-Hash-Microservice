@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Configuration
 class WebClientConfig {
@@ -18,14 +19,16 @@ class WebClientConfig {
 
     class WebSender(private val webClient: WebClient) : Sender {
 
-        override fun <T : Any> invoke(requests: List<T>) {
+        override fun <T : Any> invoke(requests: List<T>): Mono<Unit> =
             Flux.fromIterable(List(requests.size) {
                 webClient.method(HttpMethod.POST)
                     .uri(Route.INTERNAL_API + Route.CREATE_SUBTASK)
                     .bodyValue(requests[it])
                     .retrieve()
                     .bodyToMono(Unit::class.java)
-            }).flatMap { it }.collectList().block()
-        }
+            })
+                .flatMap { it }
+                .collectList()
+                .thenReturn(Unit)
     }
 }
