@@ -13,15 +13,18 @@ class WebClientConfig {
 
     @Bean
     @ConditionalOnMissingBean(RabbitConfig::class)
-    fun createWebSender(properties: ManagerConfigurationProperties): WebSender =
+    fun createSender(properties: ManagerConfigurationProperties): WebSender =
         WebSender(WebClient.create(properties.uri))
 
     class WebSender(private val webClient: WebClient) : Sender {
 
         override fun <T : Any> invoke(requests: List<T>) {
             Flux.fromIterable(List(requests.size) {
-                webClient.method(HttpMethod.POST).uri(Route.INTERNAL_API + Route.CREATE_SUBTASK).bodyValue(requests[it])
-                    .retrieve().bodyToMono(Unit::class.java)
+                webClient.method(HttpMethod.POST)
+                    .uri(Route.INTERNAL_API + Route.CREATE_SUBTASK)
+                    .bodyValue(requests[it])
+                    .retrieve()
+                    .bodyToMono(Unit::class.java)
             }).flatMap { it }.collectList().block()
         }
     }

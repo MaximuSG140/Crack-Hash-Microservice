@@ -8,7 +8,7 @@ import org.crackhash.manager.task.api.dto.TaskStatus
 import org.crackhash.manager.task.api.event.CompletedSubtaskEvent
 import org.crackhash.manager.task.api.event.CreatedTaskEvent
 import org.crackhash.manager.task.impl.Task.Companion.create
-import org.crackhash.manager.task.impl.data.TaskRepository
+import org.crackhash.manager.task.impl.data.TaskCacheRepository
 import org.crackhash.manager.util.LogBefore
 import org.crackhash.manager.util.Sender
 import org.springframework.stereotype.Service
@@ -18,7 +18,7 @@ import reactor.core.scheduler.Schedulers
 @Service
 class TaskServiceImpl(
     private val properties: ManagerConfigurationProperties,
-    private val repository: TaskRepository,
+    private val repository: TaskCacheRepository,
     private val sender: Sender
 ): TaskService {
 
@@ -41,12 +41,8 @@ class TaskServiceImpl(
         repository.findById(id)
             .map { it.updateByTimeout(properties.ttl.toLong()) }
             .flatMap { if (it.status == TaskStatus.ERROR) repository.remove(it) else Mono.just(it) }
-            .map { mapToTaskResponse(it) }
-
-    private fun mapToTaskResponse(task: Task): TaskResponse = TaskResponse(task.status, task.words)
+            .map { TaskResponse(it.status, it.words) }
 
     private fun mapToCreatedTaskEvents(task: Task): List<CreatedTaskEvent> =
-        List(properties.partCount) {
-            CreatedTaskEvent(task.id, it, properties.partCount, task.hash, task.maxLength, properties.alphabet)
-        }
+        List(properties.partCount) { CreatedTaskEvent(task.id, it, properties.partCount, task.hash, task.maxLength, properties.alphabet) }
 }
