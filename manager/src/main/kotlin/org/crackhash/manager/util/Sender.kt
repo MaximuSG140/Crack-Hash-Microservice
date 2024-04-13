@@ -1,8 +1,9 @@
 package org.crackhash.manager.util
 
+import kotlinx.serialization.json.JsonElement
 import reactor.core.publisher.Mono
 
 interface Sender {
 
-    operator fun <T : Any> invoke(requests: List<T>): Mono<Unit>
+    operator fun invoke(requests: List<JsonElement>): Mono<Unit>
 }

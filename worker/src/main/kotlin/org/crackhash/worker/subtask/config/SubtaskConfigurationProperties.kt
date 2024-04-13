@@ -1,9 +1,9 @@
-package org.crackhash.worker.config
+package org.crackhash.worker.subtask.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "crack-hash-worker")
-data class WorkerConfigurationProperties(
+data class SubtaskConfigurationProperties(
     val version: String,
     val uri: String
 )

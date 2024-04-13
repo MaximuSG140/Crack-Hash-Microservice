@@ -1,6 +1,8 @@
 package org.crackhash.worker.util
 
+import kotlinx.serialization.json.JsonElement
+
 interface Sender {
 
-    operator fun <T : Any> invoke(requests: List<T>)
+    operator fun invoke(request: JsonElement)
 }

@@ -1,6 +1,6 @@
-package org.crackhash.worker.config
+package org.crackhash.worker.subtask.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.crackhash.worker.util.RabbitSender
 import org.crackhash.worker.util.Sender
 import org.springframework.amqp.rabbit.annotation.EnableRabbit
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -16,16 +16,6 @@ class RabbitConfig {
 
     @Bean
     @ConditionalOnBean(RabbitConfig::class)
-    fun createSender(properties: WorkerConfigurationProperties, template: RabbitTemplate, mapper: ObjectMapper): Sender =
-        RabbitSender(template, Route.MANAGER_QUEUE, mapper)
-
-    class RabbitSender(
-        private val template: RabbitTemplate,
-        private val queue: String,
-        private val mapper: ObjectMapper
-    ) : Sender {
-
-        override fun <T : Any> invoke(requests: List<T>): Unit =
-            requests.forEach { template.convertAndSend(queue, mapper.writeValueAsString(it)) }
-    }
+    fun sender(properties: SubtaskConfigurationProperties, template: RabbitTemplate): Sender =
+        RabbitSender(template, SubtaskRoute.MANAGER_QUEUE)
 }

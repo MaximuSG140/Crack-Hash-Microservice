@@ -1,5 +1,7 @@
 package org.crackhash.worker.subtask.impl
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import org.apache.commons.codec.digest.DigestUtils
 import org.crackhash.worker.subtask.api.SubtaskService
 import org.crackhash.worker.subtask.api.event.CompletedSubtaskEvent
@@ -18,7 +20,11 @@ class SubtaskServiceImpl(private val sender: Sender) : SubtaskService {
 
     @LogBefore
     override fun run(event: CreatedTaskEvent): Unit =
-        sender(listOf(CompletedSubtaskEvent(event.id, event.partNumber, findWords(event))))
+        sender(
+            Json.encodeToJsonElement(
+                CompletedSubtaskEvent(event.id, event.partNumber, findWords(event))
+            )
+        )
 
     private fun findWords(event: CreatedTaskEvent): Set<String> =
         Generator.permutation(event.alphabet.split(""))
