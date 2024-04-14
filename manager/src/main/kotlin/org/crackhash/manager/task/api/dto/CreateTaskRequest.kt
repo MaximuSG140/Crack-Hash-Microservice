@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Positive
 
 data class CreateTaskRequest(
-    @NotEmpty(message = "Hash may not be empty")
-    val hash: String,
-
-    @Positive(message = "Max length must not be less than 0")
-    val maxLength: Int
+    @field:NotEmpty(message = "error.task.request.hash") val hash: String,
+    @field:Positive(message = "error.task.request.max_length") val maxLength: Int
 )
