@@ -53,6 +53,8 @@ dependencies {
 //    implementation("org.springframework.cloud:spring-cloud-stream")
 //    implementation("org.springframework.cloud:spring-cloud-stream-binder-rabbit")
 
+//    implementation("org.springframework.boot:spring-boot-starter-quartz")
+
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
