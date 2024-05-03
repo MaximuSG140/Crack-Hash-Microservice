@@ -6,29 +6,12 @@ services:
     container_name: rabbitmq
     ports: [ "15672:15672" ]
 
-#  redis:
-#    image: redis:7-alpine
-#    container_name: redis
-#    command: ["redis-server", "--appendonly", "no", "--maxmemory", "500mb", "--maxmemory-policy", "allkeys-lru"]
-#    ports: [ "6379:6379" ]
-
   mongo-setup:
     image: mongo:latest
     container_name: mongo-setup
     depends_on: [ mongo1, mongo2, mongo3 ]
     volumes: [ ./rs-init.sh:/scripts/rs-init.sh ]
     entrypoint: [ bash, /scripts/rs-init.sh ]
-
-  eureka-server:
-    container_name: eureka-server
-    build: ./eureka-server
-    ports: [ "8761:8761" ]
-
-  gateway:
-    container_name: gateway
-    build: ./gateway
-    depends_on: [ manager, worker1 ]
-    ports: [ "8765:8765" ]
 
   manager:
     container_name: manager

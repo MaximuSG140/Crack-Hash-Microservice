@@ -6,20 +6,17 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
-import org.crackhash.manager.task.api.dto.CreateTaskRequest
-import org.crackhash.manager.task.api.dto.TaskStatus
-import org.crackhash.manager.task.api.event.CompletedSubtaskEvent
+import org.crackhash.manager.task.api.contracts.CreateTaskRequest
+import org.crackhash.manager.task.api.contracts.TaskStatus
+import org.crackhash.manager.task.api.contracts.CompletedSubtaskEvent
 import org.crackhash.manager.task.config.TaskConfigurationProperties
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 import kotlin.time.Duration
 import kotlin.time.toKotlinDuration
 
-@Document("task")
 @Serializable
 data class Task(
-    @Id @Required val id: String = UUID.randomUUID().toString(),
+    @Required val id: String = UUID.randomUUID().toString(),
     @Required val words: Set<String> = emptySet(),
     @Required val partNumbers: Set<Int> = emptySet(),
     @Required val status: TaskStatus = TaskStatus.CREATED,
@@ -48,6 +45,9 @@ data class Task(
     fun update(event: CompletedSubtaskEvent): Task =
         run {
             require(id == event.id) { "Task id=$id not equals request id=${event.id}" }
+            if (status == TaskStatus.ERROR) {
+                return this
+            }
             if (partNumbers.contains(event.partNumber)) { this }
             else {
                 val newPartNumbers = partNumbers + event.partNumber
@@ -62,9 +62,10 @@ data class Task(
     fun updateStatus(status: TaskStatus): Task =
         when(status) {
             TaskStatus.IN_PROGRESS -> this.copy(status = TaskStatus.IN_PROGRESS)
+            TaskStatus.ERROR -> this.copy(status = TaskStatus.ERROR)
             else -> throw IllegalArgumentException("Unknown status $status")
         }
 
-    private fun isExpired(): Boolean =
+    fun isExpired(): Boolean =
         status != TaskStatus.READY && Clock.System.now().minus(duration).toLocalDateTime(TimeZone.UTC) > createTime
 }

@@ -1,4 +1,4 @@
-package org.crackhash.worker.subtask.api.event
+package org.crackhash.manager.task.api.contracts
 
 import kotlinx.serialization.Serializable
 

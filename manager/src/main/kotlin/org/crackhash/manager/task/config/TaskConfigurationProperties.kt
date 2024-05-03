@@ -10,7 +10,7 @@ data class TaskConfigurationProperties(
     val ttl: Duration,
     val partCount: Int,
     val alphabet: String,
-    val uri: String
+    val workerUrl: String
 ) {
 
     init {
@@ -19,6 +19,6 @@ data class TaskConfigurationProperties(
         require(partCount > 0) { "Part count=${partCount} must be more positive" }
         require(alphabet.isNotEmpty()) { "Alphabet=${alphabet} must be not empty" }
         require(alphabet.all(hashSetOf<Char>()::add)) { "Chars in alphabet=${alphabet} must be unique" }
-        require(uri.isNotEmpty()) { "Uri=${uri} must be not empty" }
+        require(workerUrl.isNotEmpty()) { "Uri=${workerUrl} must be not empty" }
     }
 }

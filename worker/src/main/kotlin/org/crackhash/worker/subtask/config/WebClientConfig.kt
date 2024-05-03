@@ -1,7 +1,6 @@
 package org.crackhash.worker.subtask.config
 
-import org.crackhash.worker.util.WebSender
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.crackhash.worker.subtask.impl.WebSender
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -13,10 +12,9 @@ import org.springframework.web.client.RestClient
 class WebClientConfig {
 
     @Bean
-    @ConditionalOnMissingBean(RabbitConfig::class)
     fun sender(properties: SubtaskConfigurationProperties): WebSender =
         WebSender(
-            RestClient.create(properties.uri)
+            RestClient.create(properties.managerUrl)
                 .method(HttpMethod.PATCH)
                 .uri(SubtaskRoute.INTERNAL_API + SubtaskRoute.UPDATE_TASK)
         )
